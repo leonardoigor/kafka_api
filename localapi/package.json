@@ -1,0 +1,10 @@
+{
+  "name": "kafka",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "up": "docker compose -f docker-compose.yml -p api_local up -d --renew-anon-volumes ",
+    "down": "docker compose -f docker-compose.yml -p api_local down --volumes --rmi local"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "kafka_api_",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "kafka:up": "npm run --prefix ./kafka up",
+    "kafka:down": "npm run --prefix ./kafka down",
+    "apilocal:up": "npm run --prefix ./localapi up",
+    "apilocal:down": "npm run --prefix ./localapi down",
+    "apinuvem:up": "npm run --prefix ./nuvemapi up",
+    "apinuvem:down": "npm run --prefix ./nuvemapi down",
+    "up": "yarn kafka:up && yarn apilocal:up && yarn apinuvem:up",
+    "down": "yarn kafka:down && yarn apilocal:down && yarn apinuvem:down",
+    "refresh": "yarn down && yarn up"
+  }
+}
