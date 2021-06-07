@@ -1,5 +1,10 @@
 version: "3"
 services: 
+    api_nuvem:
+        build: 
+            context: ./src/
+        ports: 
+            - "3001:3001"
     db:
         image: mysql
         volumes: 
