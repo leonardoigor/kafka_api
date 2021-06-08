@@ -7,7 +7,6 @@ module.exports = class KafkaServices {
         this.connect(clientId)
     }
     connect(clientId = 'login') {
-        const { Kafka } = require('kafkajs')
 
 
         try {
@@ -15,10 +14,11 @@ module.exports = class KafkaServices {
                 clientId,
                 brokers: ['localhost:9092', 'localhost:9092', 'localhost:9092'],
                 retry: {
-                    initialRetryTime: 300,
+                    initialRetryTime: 50,
                     retries: 10
                 },
-                logLevel: logLevel.WARN
+                logLevel: logLevel.INFO,
+
             })
             console.log('Kafka Connected');
         } catch (error) {
@@ -37,17 +37,24 @@ module.exports = class KafkaServices {
         })
     }
     async emit(data, topic) {
-        const producer = this.kafka.producer()
+        try {
+            console.log(data, topic, 'init');
+            const producer = this.kafka.producer()
+            console.log('create produces');
+            await producer.connect()
+            console.log('connect produces');
+            await producer.send({
+                topic: topic,
+                messages: [
+                    { value: JSON.stringify(data) },
+                ],
+            })
+            console.log('send produces');
 
-        await producer.connect()
-        await producer.send({
-            topic: topic,
-            messages: [
-                { value: JSON.stringify(data) },
-            ],
-        })
-
-        await producer.disconnect()
+            await producer.disconnect()
+        } catch (error) {
+            console.log('error emit ', error);
+        }
     }
 
     static createKafkaServices() {

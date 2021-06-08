@@ -3,8 +3,8 @@
     "username": "root",
     "password": "root",
     "database": "api_local",
-    "host": "db_local",
-    "dialect": "mysql"
+    "host": "./dev.sqlite",
+    "dialect": "sqlite"
   },
   "test": {
     "username": "root",
