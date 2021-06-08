@@ -12,12 +12,13 @@ module.exports = class KafkaServices {
         try {
             this.kafka = new Kafka({
                 clientId,
-                brokers: ['localhost:9092', 'localhost:9092', 'localhost:9092'],
+                brokers: ['localhost:9092'],
                 retry: {
-                    initialRetryTime: 300,
+                    initialRetryTime: 50,
                     retries: 10
                 },
-                logLevel: logLevel.WARN
+                logLevel: logLevel.DEBUG,
+
             })
             console.log('Kafka Connected');
         } catch (error) {

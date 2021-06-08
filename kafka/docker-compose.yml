@@ -7,6 +7,8 @@ services:
             - "2181:2181"
         environment: 
             - "ALLOW_ANONYMOUS_LOGIN=yes"
+        networks: 
+            - zook_network
     kafka:
         container_name: kafka
         image: "bitnami/kafka:latest"
@@ -16,5 +18,21 @@ services:
             - KAFKA_BROKER_ID=1
             - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
             - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
-            - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+            - KAFKA_CFG_ZOOKEEPER_CONNECT=172.20.0.1:2181
             - ALLOW_PLAINTEXT_LISTENER=yes
+        networks: 
+            - kafka_network
+
+networks:
+  kafka_network:
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: "172.25.0.1"
+    ipam:
+      config:
+        - subnet: "172.21.0.1/16"
+  zook_network:
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: "172.20.0.1"
+    ipam:
+      config:
+        - subnet: "172.20.0.0/16"
