@@ -7,6 +7,7 @@ module.exports = class KafkaServices {
         this.connect(clientId)
     }
     connect(clientId = 'login') {
+        const { Kafka } = require('kafkajs')
 
 
         try {
@@ -36,18 +37,15 @@ module.exports = class KafkaServices {
         })
     }
     async emit(data, topic) {
-        console.log(data, topic, 'init');
         const producer = this.kafka.producer()
-        console.log('create produces');
+
         await producer.connect()
-        console.log('connect produces');
         await producer.send({
             topic: topic,
             messages: [
                 { value: JSON.stringify(data) },
             ],
         })
-        console.log('send produces');
 
         await producer.disconnect()
     }

@@ -1,21 +1,11 @@
-const express = require('express')
-const db = require('./models/')
+const kafka = require('./Kafka')
 
-const app = express()
-const main = async () => {
-    return await db.sequelize.sync()
+const app = kafka.createKafkaServices('api_nuvem')
+
+console.log('consumer');
+const onMessage = ({ message }) => {
+    console.log('On message');
+    let data = String(message.value)
+    console.log(data, 'data');
 }
-
-app.get('/', async (req, res) => {
-    await db.sequelize.models.User.findAll().then(e => {
-
-        res.send({ data: e })
-    }).catch(e => {
-        res.send({ e })
-    })
-})
-app.listen(3001, async () => {
-
-
-    console.log('runing', 3001)
-})
+app.watch('create_user', onMessage)

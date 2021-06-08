@@ -1,27 +1,25 @@
 try {
     const express = require('express')
-    const db = require('./models/')
+    const kafka = require('./Kafka')
 
     const app = express()
     app.use(express.json())
-    const kafka = require('./Kafka')
-    const ka = kafka.createKafkaServices()
-
-    app.post('/', async (req, res) => {
-        await db.sequelize.models.User.findAll().then(e => {
-            console.log(req.body);
-            res.send({ data: e })
-        }).catch(e => {
-            res.send({ e: e.message })
-        })
+    let kafaConnect = kafka.createKafkaServices('api_local')
+    let main = async data => {
+        await kafaConnect.emit(data, 'create_user')
+    }
+    main({ status: "passou" })
+    app.use((req, _, next) => {
+        req.kafka = kafaConnect
+        next()
     })
+    require('./routes')(app)
+
+
+
+
+
     app.listen(3000, async () => {
-        // await main().then(m => {
-        //     console.log(m, 's');
-        // })
-
-
-
         console.log('runing', 3000)
     })
 } catch (error) {
